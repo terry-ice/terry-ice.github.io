@@ -1,0 +1,985 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="javascript,数据算法,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1">
+
+
+
+
+
+
+<meta name="description" content="本章将介绍数据排序的基本算法和高级算法。这些算法都只依赖数组来存储数据。我们还 将一起看看几种计算程序运行时间的方法，以便确定哪种算法效率最高。 数组测试平台 本章将从开发一个数组测试平台开始，它将辅助我们完成基本排序算法的研究。我们将创 建一个数组类和一些封装了常规数组操作的函数:插入新数据，显示数组数据及调用不同 的排序算法。这个类还包含了一个 swap() 函数，用于交换数组元素。 创建数组">
+<meta name="keywords" content="javascript,数据算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据结构与算法读书笔记（排序算法①基本排序算法)">
+<meta property="og:url" content="https://592php.github.io/2017/12/07/数据结构与算法读书笔记/index.html">
+<meta property="og:site_name" content="Terry的博客">
+<meta property="og:description" content="本章将介绍数据排序的基本算法和高级算法。这些算法都只依赖数组来存储数据。我们还 将一起看看几种计算程序运行时间的方法，以便确定哪种算法效率最高。 数组测试平台 本章将从开发一个数组测试平台开始，它将辅助我们完成基本排序算法的研究。我们将创 建一个数组类和一些封装了常规数组操作的函数:插入新数据，显示数组数据及调用不同 的排序算法。这个类还包含了一个 swap() 函数，用于交换数组元素。 创建数组">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://592php.github.io/assets/img/20171207_1.png">
+<meta property="og:image" content="https://592php.github.io/assets/img/20171207_2.png">
+<meta property="og:updated_time" content="2017-12-07T09:52:35.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="数据结构与算法读书笔记（排序算法①基本排序算法)">
+<meta name="twitter:description" content="本章将介绍数据排序的基本算法和高级算法。这些算法都只依赖数组来存储数据。我们还 将一起看看几种计算程序运行时间的方法，以便确定哪种算法效率最高。 数组测试平台 本章将从开发一个数组测试平台开始，它将辅助我们完成基本排序算法的研究。我们将创 建一个数组类和一些封装了常规数组操作的函数:插入新数据，显示数组数据及调用不同 的排序算法。这个类还包含了一个 swap() 函数，用于交换数组元素。 创建数组">
+<meta name="twitter:image" content="https://592php.github.io/assets/img/20171207_1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://592php.github.io/2017/12/07/数据结构与算法读书笔记/">
+
+
+
+
+
+  <title>数据结构与算法读书笔记（排序算法①基本排序算法) | Terry的博客</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-115087671-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Terry的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">我不怕千万人阻挡,只怕自己投降!</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://592php.github.io/2017/12/07/数据结构与算法读书笔记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Terry">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/assets/img/head.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Terry的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">数据结构与算法读书笔记（排序算法①基本排序算法)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-07T11:16:06+08:00">
+                2017-12-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/读书笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">读书笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/12/07/数据结构与算法读书笔记/" class="leancloud_visitors" data-flag-title="数据结构与算法读书笔记（排序算法①基本排序算法)">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本章将介绍数据排序的基本算法和高级算法。这些算法都只依赖数组来存储数据。我们还 将一起看看几种计算程序运行时间的方法，以便确定哪种算法效率最高。</p>
+<h1 id="数组测试平台"><a href="#数组测试平台" class="headerlink" title="数组测试平台"></a>数组测试平台</h1><ul>
+<li><p>本章将从开发一个数组测试平台开始，它将辅助我们完成基本排序算法的研究。我们将创 建一个数组类和一些封装了常规数组操作的函数:插入新数据，显示数组数据及调用不同 的排序算法。这个类还包含了一个 swap() 函数，用于交换数组元素。</p>
+<h2 id="创建数组测试平台类"><a href="#创建数组测试平台类" class="headerlink" title="创建数组测试平台类"></a>创建数组测试平台类</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">CArray</span>(<span class="params">numElements</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.dataStore = [];</span><br><span class="line">  <span class="keyword">this</span>.pos = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">this</span>.numElements = numElements;</span><br><span class="line">  <span class="keyword">this</span>.insert = insert;</span><br><span class="line">  <span class="keyword">this</span>.toString = toString;</span><br><span class="line">  <span class="keyword">this</span>.clear = clear;</span><br><span class="line">  <span class="keyword">this</span>.setData = setData;</span><br><span class="line">  <span class="keyword">this</span>.swap = swap;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; numElements; ++i) &#123;</span><br><span class="line">    <span class="keyword">this</span>.dataStore[i] = i;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//生成随机数</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">setData</span>(<span class="params"></span>) </span>&#123; </span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="keyword">this</span>.numElements; ++i) &#123;</span><br><span class="line">    <span class="keyword">this</span>.dataStore[i] = <span class="built_in">Math</span>.floor(<span class="built_in">Math</span>.random() * (<span class="keyword">this</span>.numElements + <span class="number">1</span>));</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">clear</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="keyword">this</span>.dataStore.length; ++i) &#123;</span><br><span class="line">    <span class="keyword">this</span>.dataStore[i] = <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">insert</span>(<span class="params">element</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.dataStore[<span class="keyword">this</span>.pos++] = element;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">toString</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> retstr = <span class="string">""</span>;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="keyword">this</span>.dataStore.length; ++i) &#123;</span><br><span class="line">    retstr += <span class="keyword">this</span>.dataStore[i] + <span class="string">" "</span>;</span><br><span class="line">    <span class="keyword">if</span> (i &gt; <span class="number">0</span> &amp; i % <span class="number">10</span> == <span class="number">0</span>) &#123;</span><br><span class="line">      retstr += <span class="string">"\n"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> retstr;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">swap</span>(<span class="params">arr, index1, index2</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> temp = arr[index1];</span><br><span class="line">  arr[index1] = arr[index2];</span><br><span class="line">  arr[index2] = temp;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>random()方法</p>
+</li>
+<li>Math.random()方法返回大于等于 0 小于 1 的一个随机数。对于某些站点来说，这个方法非常实用，因为可以利用它来随机显示一些名人名言和新闻事件。套用下面的公式，就可以利用 Math.random() 从某个整数范围内随机选择一个值。</li>
+<li>值 = Math.floor(Math.random() * 可能值的总数 + 第一个可能的值)</li>
+<li><p>公式中用到了 Math.floor()方法，这是因为 Math.random()总返回一个小数值。而用这个小数 值乘以一个整数，然后再加上一个整数，最终结果仍然还是一个小数。举例来说，如果你想选择一个 1 到 10 之间的数值，可以像下面这样编写代码:</p>
+<a id="more"></a>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> num = <span class="built_in">Math</span>.floor(<span class="built_in">Math</span>.random() * <span class="number">10</span> + <span class="number">1</span>);</span><br><span class="line">alert(<span class="built_in">Math</span>.floor(<span class="number">25.9</span>));    <span class="comment">//25</span></span><br><span class="line">alert(<span class="built_in">Math</span>.floor(<span class="number">25.5</span>));    <span class="comment">//25</span></span><br><span class="line">alert(<span class="built_in">Math</span>.floor(<span class="number">25.1</span>));    <span class="comment">//25</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Math.floor()执行向下舍入，即它总是将数值向下舍入为最接近的整数;</p>
+<h2 id="使用测试平台类"><a href="#使用测试平台类" class="headerlink" title="使用测试平台类"></a>使用测试平台类</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">//numElements 为生成随机数的数量</span></span><br><span class="line"><span class="keyword">var</span> numElements = <span class="number">100</span>;</span><br><span class="line"><span class="keyword">var</span> myNums = <span class="keyword">new</span> CArray(numElements);</span><br><span class="line">  myNums.setData();</span><br><span class="line">  <span class="built_in">console</span>.log(myNums.toString());</span><br><span class="line"><span class="comment">//打印输出</span></span><br><span class="line"><span class="comment">/*57 84 50 84 31 62 97 7 11 63 62 </span></span><br><span class="line"><span class="comment">88 55 64 40 34 18 7 44 14 15 </span></span><br><span class="line"><span class="comment">50 34 48 29 50 69 45 16 59 27 </span></span><br><span class="line"><span class="comment">25 5 49 14 48 53 5 96 59 84 </span></span><br><span class="line"><span class="comment">69 38 10 45 67 58 6 30 8 27 </span></span><br><span class="line"><span class="comment">46 8 92 85 64 64 22 22 24 38 </span></span><br><span class="line"><span class="comment">84 33 26 60 51 93 66 58 87 82 </span></span><br><span class="line"><span class="comment">67 78 92 95 76 72 77 16 57 64 </span></span><br><span class="line"><span class="comment">39 41 39 88 43 0 31 65 99 2 </span></span><br><span class="line"><span class="comment">8 31 8 37 9 71 16 93 48 */</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="基本排序算法"><a href="#基本排序算法" class="headerlink" title="基本排序算法"></a>基本排序算法</h1><ul>
+<li>接下来要介绍的基本排序算法其核心思想是指对一组数据按照一定的顺序重新排列。重新 排列时用到的技术是一组嵌套的 for 循环。其中外循环会遍历数组的每一项，内循环则用 于比较元素。这些算法非常逼真地模拟了人类在现实生活中对数据的排序，例如纸牌玩家 在处理手中的牌时对纸牌进行排序，或者教师按照字母顺序或者分数对试卷进行排序。</li>
+</ul>
+<h2 id="冒泡排序"><a href="#冒泡排序" class="headerlink" title="冒泡排序"></a>冒泡排序</h2><ul>
+<li>我们先来了解一下冒泡排序算法，它是最慢的排序算法之一，但也是一种最容易实现的排序算法。</li>
+<li>之所以叫冒泡排序是因为使用这种排序算法排序时，数据值会像气泡一样从数组的一端漂 浮到另一端。假设正在将一组数字按照升序排列，较大的值会浮动到数组的右侧，而较小 的值则会浮动到数组的左侧。之所以会产生这种现象是因为算法会多次在数组中移动，比 较相邻的数据，当左侧值大于右侧值时将它们进行互换。</li>
+</ul>
+<h3 id="冒泡排序小实例-过程"><a href="#冒泡排序小实例-过程" class="headerlink" title="冒泡排序小实例-过程"></a>冒泡排序小实例-过程</h3><ul>
+<li>E A D B H </li>
+<li>①经过第一次排序后，这个列表变成:  A E D B H </li>
+<li>②前两个元素进行了互换。接下来再次排序又会变成: A D E B H</li>
+<li>③第二个和第三个元素进行了互换。继续进行排序: A D B E H</li>
+<li>④第三个和第四个元素进行了互换。最后，第二个和第三个元素还会再次互换，得到最终 顺序:A B D E H</li>
+<li>演示了如何对一个大的数字数据集合进行冒泡排序。在图中，我们分析了插入数组 中的两个特定值:2 和 72。这两个数字都被圈了起来。你可以看到 72 是如何从数组的开 头移动到中间的，还有 2 是如何从数组的后半部分移动到开头的。<br><img src="/assets/img/20171207_1.png" alt></li>
+</ul>
+<h3 id="冒泡排序的代码"><a href="#冒泡排序的代码" class="headerlink" title="冒泡排序的代码"></a>冒泡排序的代码</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//在  CArray 方法写入 bubbleSort</span></span><br><span class="line"><span class="comment">// this.bubbleSort = bubbleSort; //冒泡排序</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">bubbleSort</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> numElements = <span class="keyword">this</span>.dataStore.length;</span><br><span class="line">  <span class="keyword">var</span> temp;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> outer = numElements; outer &gt;= <span class="number">2</span>; --outer) &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> inner = <span class="number">0</span>; inner &lt;= outer - <span class="number">1</span>; ++inner) &#123;</span><br><span class="line">      <span class="keyword">if</span> (<span class="keyword">this</span>.dataStore[inner] &gt; <span class="keyword">this</span>.dataStore[inner + <span class="number">1</span>]) &#123;</span><br><span class="line">        swap(<span class="keyword">this</span>.dataStore, inner, inner + <span class="number">1</span>);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//请确保在 CArray 构造函数中添加对这个函数的调用。</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>这个小程序演示了如何使用 bubbleSort() 函数对 10 个数字进行排序。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> numElements = <span class="number">10</span>;</span><br><span class="line"><span class="keyword">var</span> mynums = <span class="keyword">new</span> CArray(numElements);</span><br><span class="line">mynums.setData();</span><br><span class="line"><span class="built_in">console</span>.log(mynums.toString(),<span class="string">'排序前'</span>);</span><br><span class="line">mynums.bubbleSort();</span><br><span class="line"><span class="built_in">console</span>.log(mynums.toString(),<span class="string">'排序后'</span>);</span><br><span class="line"><span class="comment">//以上代码输出为:</span></span><br><span class="line"><span class="comment">//10 4 5 2 2 5 3 4 10 9  排序前</span></span><br><span class="line"><span class="comment">//2 2 3 4 4 5 5 9 10 10  排序后</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>我们可以看到，这个冒泡排序算法正常运行了，但最好能够看到这个算法的执行过程，因 为看到排序的过程对我们理解这个算法是如何工作的很有帮助。我们只要在 bubbleSort() 函数中小心地加入 toString() 函数，就可以看到这个数组在排序过程中的当前状态</p>
+</li>
+<li><p>在 bubbleSort() 函数中添加对 toString() 函数的调用</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">bubbleSort</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> numElements = <span class="keyword">this</span>.dataStore.length;</span><br><span class="line">  <span class="keyword">var</span> temp;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> outer = numElements; outer &gt;= <span class="number">2</span>; --outer) &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> inner = <span class="number">0</span>; inner &lt;= outer - <span class="number">1</span>; ++inner) &#123;</span><br><span class="line">      <span class="keyword">if</span> (<span class="keyword">this</span>.dataStore[inner] &gt; <span class="keyword">this</span>.dataStore[inner + <span class="number">1</span>]) &#123;</span><br><span class="line">        swap(<span class="keyword">this</span>.dataStore, inner, inner + <span class="number">1</span>);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.toString());</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//会得到以下输出结果:</span></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">8 3 9 8 7 4 8 7 2 10 </span></span><br><span class="line"><span class="comment">3 8 8 7 4 8 7 2 9 10 </span></span><br><span class="line"><span class="comment">3 8 7 4 8 7 2 8 9 10 </span></span><br><span class="line"><span class="comment">3 7 4 8 7 2 8 8 9 10 </span></span><br><span class="line"><span class="comment">3 4 7 7 2 8 8 8 9 10 </span></span><br><span class="line"><span class="comment">3 4 7 2 7 8 8 8 9 10 </span></span><br><span class="line"><span class="comment">3 4 2 7 7 8 8 8 9 10 </span></span><br><span class="line"><span class="comment">3 2 4 7 7 8 8 8 9 10 </span></span><br><span class="line"><span class="comment">2 3 4 7 7 8 8 8 9 10 </span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>通过这个输出结果，我们可以更加容易地看出小的值是如何移到数组开头的，大的值又是 如何移到数组末尾的。</p>
+</li>
+</ul>
+<h2 id="选择排序"><a href="#选择排序" class="headerlink" title="选择排序"></a>选择排序</h2><ul>
+<li>我们接下来要看的是选择排序算法。选择排序从数组的开头开始，将第一个元素和其他元 素进行比较。检查完所有元素后，最小的元素会被放到数组的第一个位置，然后算法会从 第二个位置继续。这个过程一直进行，当进行到数组的倒数第二个位置时，所有的数据便 完成了排序。</li>
+<li>选择排序会用到嵌套循环。外循环从数组的第一个元素移动到倒数第二个元素;内循环从第 二个数组元素移动到最后一个元素，查找比当前外循环所指向的元素小的元素。每次内循环 迭代后，数组中最小的值都会被赋值到合适的位置。</li>
+</ul>
+<h3 id="选择排序小实例"><a href="#选择排序小实例" class="headerlink" title="选择排序小实例"></a>选择排序小实例</h3><ul>
+<li>初始列表为: E A D H B </li>
+<li>①第一次排序会找到最小值，并将它和列表的第一个元素进行互换。A E D H B </li>
+<li>②接下来查找第一个元素后面的最小值(第一个元素此时已经就位)，并对它们进行互换:A B D H E</li>
+<li>③D 也已经就位，因此下一步会对 E 和 H 进行互换，列表已按顺序排好  A B D E H</li>
+<li>展示了如何对更大的数据集合进行选择排序<br><img src="/assets/img/20171207_2.png" alt></li>
+</ul>
+<h3 id="选择排序算法-selectionSort-函数的代码。"><a href="#选择排序算法-selectionSort-函数的代码。" class="headerlink" title="选择排序算法 selectionSort() 函数的代码。"></a>选择排序算法 selectionSort() 函数的代码。</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">selectionSort</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> min, temp;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> outer = <span class="number">0</span>; outer &lt;= <span class="keyword">this</span>.dataStore.length - <span class="number">2</span>; ++outer) &#123;</span><br><span class="line">    min = outer;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> inner = outer + <span class="number">1</span>; inner &lt;= <span class="keyword">this</span>.dataStore.length - <span class="number">1</span>; ++inner) &#123;</span><br><span class="line">      <span class="keyword">if</span> (<span class="keyword">this</span>.dataStore[inner] &lt; <span class="keyword">this</span>.dataStore[min]) &#123;</span><br><span class="line">        min = inner;</span><br><span class="line">      &#125;</span><br><span class="line">      swap(<span class="keyword">this</span>.dataStore, outer, min);</span><br><span class="line">    &#125;</span><br><span class="line">   <span class="comment">//console.log(this.toString());  每次排序打印</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//请确保在 CArray 构造函数中添加对这个函数的调用。</span></span><br><span class="line"><span class="comment">//调用上面的函数</span></span><br><span class="line"><span class="keyword">var</span> numElements = <span class="number">10</span>;</span><br><span class="line"><span class="keyword">var</span> mynums = <span class="keyword">new</span> CArray(numElements);</span><br><span class="line">mynums.setData();</span><br><span class="line"><span class="built_in">console</span>.log(mynums.toString(), <span class="string">'排序前'</span>);</span><br><span class="line">mynums.selectionSort();</span><br><span class="line"><span class="built_in">console</span>.log(mynums.toString(), <span class="string">'排序后'</span>);</span><br><span class="line"><span class="comment">//输出</span></span><br><span class="line"><span class="comment">// 10 5 6 7 10 1 3 7 1 8  排序前</span></span><br><span class="line"><span class="comment">// 1 6 5 7 7 3 8 1 10 10  排序后</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>将下面这行添加到 swap 之后，就可以看到选择排序函数运行后的输出结果:</li>
+</ul>
+<p>1 9 1 9 5 10 3 10 8 4<br>1 4 9 9 5 10 3 10 8 1<br>1 4 1 9 5 10 9 10 8 3<br>1 4 1 3 9 10 9 10 8 5<br>1 4 1 3 5 10 9 10 9 8<br>1 4 1 3 5 8 10 10 9 9<br>1 4 1 3 5 8 9 10 10 9<br>1 4 1 3 5 8 9 9 10 10 </p>
+<h2 id="插入排序"><a href="#插入排序" class="headerlink" title="插入排序"></a>插入排序</h2><ul>
+<li>插入排序有两个循环。外循环将数组元素挨个移动，而内循环则对外循环中选中的元素及 它后面的那个元素进行比较。如果外循环中选中的元素比内循环中选中的元素小，那么数 组元素会向右移动，为内循环中的这个元素腾出位置</li>
+</ul>
+<h3 id="排序代码"><a href="#排序代码" class="headerlink" title="排序代码"></a>排序代码</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">insertionSort</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> temp, inner;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> outer = <span class="number">1</span>; outer &lt;= <span class="keyword">this</span>.dataStore.length - <span class="number">1</span>; ++outer) &#123;</span><br><span class="line">    temp = <span class="keyword">this</span>.dataStore[outer];</span><br><span class="line">    inner = outer;</span><br><span class="line">    <span class="keyword">while</span> (inner &gt; <span class="number">0</span> &amp;&amp; (<span class="keyword">this</span>.dataStore[inner - <span class="number">1</span>] &gt;= temp)) &#123;</span><br><span class="line">      <span class="keyword">this</span>.dataStore[inner] = <span class="keyword">this</span>.dataStore[inner - <span class="number">1</span>];</span><br><span class="line">      --inner;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">this</span>.dataStore[inner] = temp;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.toString()); <span class="comment">//打印每次排序结果</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//请确保在 CArray 构造函数中添加对这个函数的调用。</span></span><br><span class="line"><span class="comment">//调用上面的函数</span></span><br><span class="line"><span class="keyword">var</span> numElements = <span class="number">10</span>;</span><br><span class="line"><span class="keyword">var</span> mynums = <span class="keyword">new</span> CArray(numElements);</span><br><span class="line">mynums.setData();</span><br><span class="line"><span class="built_in">console</span>.log(mynums.toString(), <span class="string">'排序前'</span>);</span><br><span class="line">mynums.insertionSort();</span><br><span class="line"><span class="built_in">console</span>.log(mynums.toString(), <span class="string">'排序后'</span>);</span><br><span class="line"><span class="comment">//打印</span></span><br><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment">10 10 9 8 6 2 3 8 2 10 </span></span><br><span class="line"><span class="comment">88 9 10 10 8 6 2 3 8 2 10 </span></span><br><span class="line"><span class="comment">88 8 9 10 10 6 2 3 8 2 10 </span></span><br><span class="line"><span class="comment">88 6 8 9 10 10 2 3 8 2 10 </span></span><br><span class="line"><span class="comment">88 2 6 8 9 10 10 3 8 2 10 </span></span><br><span class="line"><span class="comment">88 2 3 6 8 9 10 10 8 2 10 </span></span><br><span class="line"><span class="comment">88 2 3 6 8 8 9 10 10 2 10 </span></span><br><span class="line"><span class="comment">88 2 2 3 6 8 8 9 10 10 10 </span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+<h2 id="基本排序算法的计时比较"><a href="#基本排序算法的计时比较" class="headerlink" title="基本排序算法的计时比较"></a>基本排序算法的计时比较</h2><ul>
+<li>这三种排序算法的复杂度非常相似，从理论上来说，它们的执行效率也应该差不多。要确 定这三种算法的性能差异，我们可以使用一个非正式的计时系统来比较它们对数据集合进 行排序所花费的时间。能够对算法进行计时非常重要，因为，对 100 个或 1000 个元素进 行排序时，你看不出这些排序算法的差异。但是如果对上百万个元素进行排序，这些排序 算法之间可能存在巨大的不同。<br>本节用到的计时系统基于 JavaScript Date 对象的 getTime() 函数来取得系统时间。这个函 数的运行方式如下所示:<br>var start = new Date().getTime();<br>排序代码<br>var end = new Date().getTime();<br>var elapsed = stop - start;<br>console.log(“ 消耗的时间为:” + elapsed +” 毫秒。”);</li>
+<li><p>for循环计时:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> start = <span class="keyword">new</span> <span class="built_in">Date</span>().getTime();</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">1</span>; i &lt; <span class="number">100</span>; ++i) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(i);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> stop = <span class="keyword">new</span> <span class="built_in">Date</span>().getTime();</span><br><span class="line"><span class="keyword">var</span> elapsed = stop - start;</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">" 消耗的时间为:"</span> + elapsed + <span class="string">" 毫秒。"</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>既然我们已经有了度量排序算法效率的工具，那我们就来做一些测试，对它们进行比较:<br>为了比较基本排序算法，我们将在数组大小分别为 100、1000 和 10 000 时对这三种排序算 法计时。我们预期在数据大小为 100 和 1000 的情况下看不出这些算法的差异，但是在数 据大小为 10 000 时可以看到。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> numElements = <span class="number">100</span>;</span><br><span class="line"><span class="keyword">var</span> nums = <span class="keyword">new</span> CArray(numElements);</span><br><span class="line">nums.setData();</span><br><span class="line"><span class="keyword">var</span> start = <span class="keyword">new</span> <span class="built_in">Date</span>().getTime();</span><br><span class="line">nums.bubbleSort();</span><br><span class="line"><span class="keyword">var</span> stop = <span class="keyword">new</span> <span class="built_in">Date</span>().getTime();</span><br><span class="line"><span class="keyword">var</span> elapsed = stop - start;</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">" 对 "</span> + numElements + <span class="string">" 个元素执行冒泡排序消耗的时间为:"</span> +</span><br><span class="line">elapsed + <span class="string">" 毫秒。"</span>);</span><br><span class="line">start = <span class="keyword">new</span> <span class="built_in">Date</span>().getTime();</span><br><span class="line">nums.selectionSort();</span><br><span class="line">stop = <span class="keyword">new</span> <span class="built_in">Date</span>().getTime();</span><br><span class="line">elapsed = stop - start;</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">" 对 "</span> + numElements + <span class="string">" 个元素执行选择排序消耗的时间为:"</span> +</span><br><span class="line">elapsed + <span class="string">" 毫秒。"</span>);</span><br><span class="line">start = <span class="keyword">new</span> <span class="built_in">Date</span>().getTime();</span><br><span class="line">nums.insertionSort();</span><br><span class="line">stop = <span class="keyword">new</span> <span class="built_in">Date</span>().getTime();</span><br><span class="line">elapsed = stop - start;</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">" 对 "</span> + numElements + <span class="string">" 个元素执行插入排序消耗的时间为:"</span> +</span><br><span class="line">elapsed + <span class="string">" 毫秒。"</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>我们将 numElements 变量调整到 100 后得到的结果为:<br>对 100 个元素执行冒泡排序消耗的时间为:1 毫秒。<br>对 100 个元素执行选择排序消耗的时间为:2 毫秒。<br>对 100 个元素执行插入排序消耗的时间为:0 毫秒。</p>
+</li>
+<li><p>我们将 numElements 变量调整到 1000 后得到的结果为:<br>对 1000 个元素执行冒泡排序消耗的时间为:29 毫秒。<br>对 1000 个元素执行选择排序消耗的时间为:4 毫秒。<br>对 1000 个元素执行插入排序消耗的时间为:0 毫秒。</p>
+</li>
+<li><p>我们将 numElements 变量调整到 10000 后得到的结果为:<br>对 10000 个元素执行冒泡排序消耗的时间为:993 毫秒。<br>对 10000 个元素执行选择排序消耗的时间为:202 毫秒。<br>对 10000 个元素执行插入排序消耗的时间为:3 毫秒。</p>
+</li>
+<li><p>选择排序和插入排序要比冒泡 排序快，插入排序是这三种算法中最快的。</p>
+</li>
+<li>不过要记住，这些测试必须经过多次的运行， 最后得到的结果才可被视为是有效的统计。</li>
+</ul>
+<h3 id="高级排序算法-下篇再分享给大家"><a href="#高级排序算法-下篇再分享给大家" class="headerlink" title="高级排序算法,下篇再分享给大家"></a>高级排序算法,下篇再分享给大家</h3>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/javascript/" rel="tag"># javascript</a>
+          
+            <a href="/tags/数据算法/" rel="tag"># 数据算法</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/31/es6整理-解构赋值/" rel="next" title="es6整理——解构赋值">
+                <i class="fa fa-chevron-left"></i> es6整理——解构赋值
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/12/12/npm-小模块学习-array(1)/" rel="prev" title="npm 小模块学习--array(1)">
+                npm 小模块学习--array(1) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zNDU0NS8xMTA4Mw=="></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/assets/img/head.jpg" alt="Terry">
+          <p class="site-author-name" itemprop="name">Terry</p>
+           
+              <p class="site-description motion-element" itemprop="description">web前端码农一枚。</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">39</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">36</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#数组测试平台"><span class="nav-number">1.</span> <span class="nav-text">数组测试平台</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#创建数组测试平台类"><span class="nav-number">1.1.</span> <span class="nav-text">创建数组测试平台类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用测试平台类"><span class="nav-number">1.2.</span> <span class="nav-text">使用测试平台类</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基本排序算法"><span class="nav-number">2.</span> <span class="nav-text">基本排序算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#冒泡排序"><span class="nav-number">2.1.</span> <span class="nav-text">冒泡排序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#冒泡排序小实例-过程"><span class="nav-number">2.1.1.</span> <span class="nav-text">冒泡排序小实例-过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#冒泡排序的代码"><span class="nav-number">2.1.2.</span> <span class="nav-text">冒泡排序的代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#选择排序"><span class="nav-number">2.2.</span> <span class="nav-text">选择排序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#选择排序小实例"><span class="nav-number">2.2.1.</span> <span class="nav-text">选择排序小实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#选择排序算法-selectionSort-函数的代码。"><span class="nav-number">2.2.2.</span> <span class="nav-text">选择排序算法 selectionSort() 函数的代码。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#插入排序"><span class="nav-number">2.3.</span> <span class="nav-text">插入排序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#排序代码"><span class="nav-number">2.3.1.</span> <span class="nav-text">排序代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基本排序算法的计时比较"><span class="nav-number">2.4.</span> <span class="nav-text">基本排序算法的计时比较</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#高级排序算法-下篇再分享给大家"><span class="nav-number">2.4.1.</span> <span class="nav-text">高级排序算法,下篇再分享给大家</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Terry</span>
+</div>
+
+
+<div class="powered-by">
+  你的一生
+</div>
+
+<div class="theme-info">
+  我只借一程,这一程便是余生!
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("SaEXOxIfsJ9uLvvd22739AQs-gzGzoHsz", "w1oRPqsaYjjTCdmTIY3S3AxX");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

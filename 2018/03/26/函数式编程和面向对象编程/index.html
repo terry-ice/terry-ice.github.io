@@ -1,0 +1,926 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="读书笔记,编程思想,函数式编程,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1">
+
+
+
+
+
+
+<meta name="description" content="函数式编程简单说，”函数式编程”是一种”编程范式”（programming paradigm），也就是如何编写程序的方法论。它属于”结构化编程”的一种，主要思想是把运算过程尽量写成一系列嵌套的函数调用。函数式编程要求使用函数，我们可以把运算过程定义为不同的函数。函数式编程通过组合数学函数来产生程序并避免共享状态和可变数据。 Lisp（1958年指定）是支持函数式编程的第一批语言之一，并受到lamb">
+<meta name="keywords" content="读书笔记,编程思想,函数式编程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="函数式编程和面向对象编程">
+<meta property="og:url" content="https://592php.github.io/2018/03/26/函数式编程和面向对象编程/index.html">
+<meta property="og:site_name" content="Terry的博客">
+<meta property="og:description" content="函数式编程简单说，”函数式编程”是一种”编程范式”（programming paradigm），也就是如何编写程序的方法论。它属于”结构化编程”的一种，主要思想是把运算过程尽量写成一系列嵌套的函数调用。函数式编程要求使用函数，我们可以把运算过程定义为不同的函数。函数式编程通过组合数学函数来产生程序并避免共享状态和可变数据。 Lisp（1958年指定）是支持函数式编程的第一批语言之一，并受到lamb">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-03-26T05:25:48.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="函数式编程和面向对象编程">
+<meta name="twitter:description" content="函数式编程简单说，”函数式编程”是一种”编程范式”（programming paradigm），也就是如何编写程序的方法论。它属于”结构化编程”的一种，主要思想是把运算过程尽量写成一系列嵌套的函数调用。函数式编程要求使用函数，我们可以把运算过程定义为不同的函数。函数式编程通过组合数学函数来产生程序并避免共享状态和可变数据。 Lisp（1958年指定）是支持函数式编程的第一批语言之一，并受到lamb">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://592php.github.io/2018/03/26/函数式编程和面向对象编程/">
+
+
+
+
+
+  <title>函数式编程和面向对象编程 | Terry的博客</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-115087671-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Terry的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">我不怕千万人阻挡,只怕自己投降!</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://592php.github.io/2018/03/26/函数式编程和面向对象编程/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Terry">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/assets/img/head.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Terry的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">函数式编程和面向对象编程</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-26T13:21:15+08:00">
+                2018-03-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/js/" itemprop="url" rel="index">
+                    <span itemprop="name">js</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/js/javascript/" itemprop="url" rel="index">
+                    <span itemprop="name">javascript</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/03/26/函数式编程和面向对象编程/" class="leancloud_visitors" data-flag-title="函数式编程和面向对象编程">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="函数式编程"><a href="#函数式编程" class="headerlink" title="函数式编程"></a>函数式编程</h2><p>简单说，”函数式编程”是一种”编程范式”（programming paradigm），也就是如何编写程序的方法论。<br>它属于”结构化编程”的一种，主要思想是把运算过程尽量写成一系列嵌套的函数调用。<br>函数式编程要求使用函数，我们可以把运算过程定义为不同的函数。<br>函数式编程通过组合数学函数来产生程序并避免共享状态和可变数据。 Lisp（1958年指定）是支持函数式编程的第一批语言之一，并受到lambda微积分的启发。 Lisp和许多Lisp系列语言今天仍然普遍使用。<br>函数式编程是JavaScript中的一个基本概念（JavaScript的两大支柱之一）。<br><a id="more"></a></p>
+<h3 id="函数是”第一等公民”"><a href="#函数是”第一等公民”" class="headerlink" title="函数是”第一等公民”"></a>函数是”第一等公民”</h3><p>所谓”第一等公民”（first class），指的是函数与其他数据类型一样，处于平等地位，可以赋值给其他变量，也可以作为参数，传入另一个函数，或者作为别的函数的返回值。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> hi = <span class="function"><span class="keyword">function</span>(<span class="params">name</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="string">"Hi"</span> + name;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> greeting = <span class="function"><span class="keyword">function</span>(<span class="params">name</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> hi(name);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>greeting 只不过是转个身以相同的参数调用了hi而已，因此我们可以这么写：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> greeting  = hi;</span><br><span class="line">greeting(<span class="string">"小黑"</span>)</span><br></pre></td></tr></table></figure></p>
+<h3 id="没有”副作用”-纯函数"><a href="#没有”副作用”-纯函数" class="headerlink" title="没有”副作用”(纯函数)"></a>没有”副作用”(纯函数)</h3><p>所谓”副作用”（side effect），指的是函数内部与外部互动（最典型的情况，就是修改全局变量的值），产生运算以外的其他结果。<br>函数式编程强调没有”副作用”，意味着函数要保持独立，所有功能就是返回一个新的值，没有其他行为，尤其是不得修改外部变量的值。<br>副作用可能包含，但是不限于：</p>
+<ul>
+<li>更改文件系统</li>
+<li>往数据库插入记录</li>
+<li>发送一个http请求</li>
+<li>可变数据</li>
+<li>打印/log</li>
+<li>获取用户输入</li>
+<li>dom查询</li>
+<li>访问系统状态<br>概括来讲，只要是跟函数外部环境发生交互就是副作用，但是并不是说，要禁止一切副作用，而是要让他们在可控制的范围内发生。<h3 id="只用”表达式”，不用”语句”"><a href="#只用”表达式”，不用”语句”" class="headerlink" title="只用”表达式”，不用”语句”"></a>只用”表达式”，不用”语句”</h3>“表达式”（expression）是一个单纯的运算过程，总是有返回值；”语句”（statement）是执行某种操作，没有返回值。函数式编程要求，只使用表达式，不使用语句。也就是说，每一步都是单纯的运算，而且都有返回值。<br>原因是函数式编程的开发动机，一开始就是为了处理运算（computation），不考虑系统的读写（I/O）。”语句”属于对系统的读写操作，所以就被排斥在外。<br>当然，实际应用中，不做I/O是不可能的。因此，编程过程中，函数式编程只要求把I/O限制到最小，不要有不必要的读写行为，保持计算过程的单纯性。<h3 id="不修改状态"><a href="#不修改状态" class="headerlink" title="不修改状态"></a>不修改状态</h3>上一点已经提到，函数式编程只是返回新的值，不修改系统变量。因此，不修改变量，也是它的一个重要特点。<br>在其他类型的语言中，变量往往用来保存”状态”（state）。不修改变量，意味着状态不能保存在变量中。函数式编程使用参数保存状态，最好的例子就是递归。下面的代码是一个将字符串逆序排列的函数，它演示了不同的参数如何决定了运算所处的”状态”。<br>由于使用了递归，函数式语言的运行速度比较慢，这是它长期不能在业界推广的主要原因。<h3 id="引用透明"><a href="#引用透明" class="headerlink" title="引用透明"></a>引用透明</h3>引用透明（Referential transparency），指的是函数的运行不依赖于外部变量或”状态”，只依赖于输入的参数，任何时候只要参数相同，引用函数所得到的返回值总是相同的。<h2 id="javascript面向原型-原型继承-Prototypal-inheritance"><a href="#javascript面向原型-原型继承-Prototypal-inheritance" class="headerlink" title="javascript面向原型(原型继承-Prototypal inheritance)"></a>javascript面向原型(原型继承-Prototypal inheritance)</h2>让我们先从默认的继承模式开始，即通过原型来实现继承关系链。 正如我们之前所了解的，JavaScript 中的每个函数中都有一个指向某一对象的 prototype属性。该函数被 new 操作符调用时会创建并返回一个对象，并且该对象中会有一个指向其 原型对象的秘密链接。通过该秘密链接(在某些环境中，该链接名为<strong>proto</strong>)，我们 就可以在新建的对象中调用相关原型对象的方法和属性。而原型对象自身也具有对象固有的普遍特征，因此本身也包含了指向其原型的链接。由此就形成了一条链，我们称之为原型链。<h3 id="类继承"><a href="#类继承" class="headerlink" title="类继承"></a>类继承</h3>实例继承自类,并创建子类关系：分层类分类法。通常使用<code>new</code>关键字通过构造函数实例化实例。类继承可能会或可能不会使用ES6中的<code>class</code>关键字。<h3 id="原型继承"><a href="#原型继承" class="headerlink" title="原型继承"></a>原型继承</h3>实例直接从其他对象继承。通常通过工厂函数或Object.create（）来实例化实例。实例可以由许多不同的对象组成，允许简单的选择性继承。<h2 id="面向对象优点"><a href="#面向对象优点" class="headerlink" title="面向对象优点"></a>面向对象优点</h2>很容易理解对象的基本概念，并易于解释方法调用的含义。面向对象程序员倾向于使用命令式的风格，而不是声明式的风格，这种风格读起来就像是一套简单易懂的计算机指令。<h3 id="面向对象-OOP-缺点："><a href="#面向对象-OOP-缺点：" class="headerlink" title="面向对象(OOP)缺点："></a>面向对象(OOP)缺点：</h3>OOP通常取决于共享状态。对象和行为通常在同一个实体上加在一起，这可以通过任意数量的具有非确定性顺序的函数随机访问，这可能会导致不良行为，例如竞争条件。<h2 id="函数式编程优点"><a href="#函数式编程优点" class="headerlink" title="函数式编程优点:"></a>函数式编程优点:</h2>使用功能范例，程序员可以避免任何共享状态或副作用，从而消除由于多个功能竞争相同资源而导致的错误。由于具有诸如可用的无点式等功能，与OOP相比，功能倾向于从根本上简化并且容易为更一般的可重用代码重新组合。<br>FP也趋向于支持声明和指称的风格，不拼出来的操作一步一步的指示，而是专注于怎样做，让底层的功能采取的护理如何。这为重构和性能优化留下了巨大的自由度，甚至允许用很少的代码更改替换具有更高效率的整个算法。<br>使用纯函数的计算也可以轻松扩展到多个处理器或跨分布式计算集群，而不用担心线程资源冲突，竞争条件等等。<h2 id="函数式编程缺点"><a href="#函数式编程缺点" class="headerlink" title="函数式编程缺点:"></a>函数式编程缺点:</h2>过度利用函数式编程(FP)功能可能会降低可读性，因为生成的代码通常更抽象地指定，更简洁且不太具体。<br>越来越多的人熟悉面向对象和命令式编程，而不是函数式编程，所以即使在函数式编程中常见的习惯用法也会让新的团队成员感到困惑。<br>与OOP相比，FP的学习曲线更加陡峭，因为OOP的广泛流行使得OOP的语言和学习材料变得更具对话性，而FP的语言更趋于学术化和形式化。<br>函数式语言对开发者的要求比较高，学习曲线比较陡，而且很容易因为其灵活的语法控制不好程序的结构。</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/读书笔记/" rel="tag"># 读书笔记</a>
+          
+            <a href="/tags/编程思想/" rel="tag"># 编程思想</a>
+          
+            <a href="/tags/函数式编程/" rel="tag"># 函数式编程</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/19/http读书笔记/" rel="next" title="http读书笔记">
+                <i class="fa fa-chevron-left"></i> http读书笔记
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/27/react-diff算法详解/" rel="prev" title="react-diff算法详解">
+                react-diff算法详解 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zNDU0NS8xMTA4Mw=="></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/assets/img/head.jpg" alt="Terry">
+          <p class="site-author-name" itemprop="name">Terry</p>
+           
+              <p class="site-description motion-element" itemprop="description">web前端码农一枚。</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">39</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">36</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#函数式编程"><span class="nav-number">1.</span> <span class="nav-text">函数式编程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#函数是”第一等公民”"><span class="nav-number">1.1.</span> <span class="nav-text">函数是”第一等公民”</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#没有”副作用”-纯函数"><span class="nav-number">1.2.</span> <span class="nav-text">没有”副作用”(纯函数)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#只用”表达式”，不用”语句”"><span class="nav-number">1.3.</span> <span class="nav-text">只用”表达式”，不用”语句”</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不修改状态"><span class="nav-number">1.4.</span> <span class="nav-text">不修改状态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#引用透明"><span class="nav-number">1.5.</span> <span class="nav-text">引用透明</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#javascript面向原型-原型继承-Prototypal-inheritance"><span class="nav-number">2.</span> <span class="nav-text">javascript面向原型(原型继承-Prototypal inheritance)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#类继承"><span class="nav-number">2.1.</span> <span class="nav-text">类继承</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#原型继承"><span class="nav-number">2.2.</span> <span class="nav-text">原型继承</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#面向对象优点"><span class="nav-number">3.</span> <span class="nav-text">面向对象优点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#面向对象-OOP-缺点："><span class="nav-number">3.1.</span> <span class="nav-text">面向对象(OOP)缺点：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#函数式编程优点"><span class="nav-number">4.</span> <span class="nav-text">函数式编程优点:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#函数式编程缺点"><span class="nav-number">5.</span> <span class="nav-text">函数式编程缺点:</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Terry</span>
+</div>
+
+
+<div class="powered-by">
+  你的一生
+</div>
+
+<div class="theme-info">
+  我只借一程,这一程便是余生!
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("SaEXOxIfsJ9uLvvd22739AQs-gzGzoHsz", "w1oRPqsaYjjTCdmTIY3S3AxX");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,951 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="读书笔记,js,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1">
+
+
+
+
+
+
+<meta name="description" content="react笔记概念">
+<meta name="keywords" content="读书笔记,js">
+<meta property="og:type" content="article">
+<meta property="og:title" content="react笔记">
+<meta property="og:url" content="https://592php.github.io/2018/02/01/react笔记/index.html">
+<meta property="og:site_name" content="Terry的博客">
+<meta property="og:description" content="react笔记概念">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://592php.github.io/assets/img/react/life.png">
+<meta property="og:updated_time" content="2018-08-15T00:51:16.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="react笔记">
+<meta name="twitter:description" content="react笔记概念">
+<meta name="twitter:image" content="https://592php.github.io/assets/img/react/life.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://592php.github.io/2018/02/01/react笔记/">
+
+
+
+
+
+  <title>react笔记 | Terry的博客</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-115087671-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Terry的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">我不怕千万人阻挡,只怕自己投降!</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://592php.github.io/2018/02/01/react笔记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Terry">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/assets/img/head.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Terry的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">react笔记</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-01T18:46:14+08:00">
+                2018-02-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/react/" itemprop="url" rel="index">
+                    <span itemprop="name">react</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/02/01/react笔记/" class="leancloud_visitors" data-flag-title="react笔记">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="react笔记概念"><a href="#react笔记概念" class="headerlink" title="react笔记概念"></a>react笔记概念</h2><a id="more"></a>
+<h2 id="react生命周期大致分为三个阶段"><a href="#react生命周期大致分为三个阶段" class="headerlink" title="react生命周期大致分为三个阶段"></a>react生命周期大致分为三个阶段</h2><h3 id="第一阶段：是组件挂载阶段"><a href="#第一阶段：是组件挂载阶段" class="headerlink" title="第一阶段：是组件挂载阶段"></a>第一阶段：是组件挂载阶段</h3><ul>
+<li>getDefaultProps 或es6 Class.defaultProps</li>
+<li>getInitialState 或es6 this.state</li>
+<li>componentWillMount</li>
+<li>render</li>
+<li>componentDidMount<h3 id="第二阶段：是组件在运行和交互阶段"><a href="#第二阶段：是组件在运行和交互阶段" class="headerlink" title="第二阶段：是组件在运行和交互阶段"></a>第二阶段：是组件在运行和交互阶段</h3></li>
+<li>componentWillReceiveProps</li>
+<li>shouldComponentUpdate</li>
+<li>componentWillUpdate</li>
+<li>render</li>
+<li>componentDidUpdate<h3 id="第三阶段：是组件卸载阶段"><a href="#第三阶段：是组件卸载阶段" class="headerlink" title="第三阶段：是组件卸载阶段"></a>第三阶段：是组件卸载阶段</h3><img src="/assets/img/react/life.png" alt></li>
+<li>componentWillUnmount<h3 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h3>在你开始在组件中通过 API 来获取数据之前，你需要知道 React 的生命周期方法。这些方 法是嵌入 React 组件生命周期中的一组挂钩。它们可以在 ES6 类组件中使用，但是不能在 无状态组件中使用。<br>你还记得前章中讲过的 JavaScript ES6 类以及如何在 React 中使用它们吗?除了 render() 方 法外，还有几个方法可以在 React ES6 类组件中被覆写。所有的这些都是生命周期方法。现 在让我们来深入了解他们:<br>通过之前的学习，你已经知道两种能够用在 ES6 类组件中的生命周期方法:constructor() 和 render()。<br>constructor(构造函数)只有在组件实例化并插入到 DOM 中的时候才会被调用。组件实例 化的过程称作组件的挂载(mount)。<br>render() 方法也会在组件挂载的过程中被调用，同时当组件更新的时候也会被调用。每当 组件的状态(state)或者属性(props)改变时，组件的 render() 方法都会被调用。<br>现在你了解了更多关于这两个生命周期方法的知识，也知道它们什么时候会被调用了。你 也已经在前面的学习中使用过它们了。但是 React 里还有更多的生命周期方法。<br>在组件挂载的过程中还有另外两个生命周期方法:componentWillMount() 和 componentDid- Mount()。构造函数(constructor)最先执行，componentWillMount() 会在 render() 方法之前 执行，而 componentDidMount() 在 render() 方法之后执行。</li>
+<li>constructor()</li>
+<li>componentWillMount() </li>
+<li>render()</li>
+<li>componentDidMount()<h4 id="状态或者属性改变"><a href="#状态或者属性改变" class="headerlink" title="状态或者属性改变"></a>状态或者属性改变</h4>但是当组件的状态或者属性改变的时候用来更新组件的生命周期是什么样的呢?总的来说， 它一共有5个生命周期方法用于组件更新，调用顺序如下:</li>
+<li>componentWillReceiveProps() </li>
+<li>shouldComponentUpdate()</li>
+<li>componentWillUpdate()</li>
+<li>render()</li>
+<li>componentDidUpdate()  </li>
+</ul>
+<p>最后但同样重要的，组件卸载也有生命周期。它只有一个生命周期方法:componentWillUnmount()。</p>
+<h4 id="了解所有生命周期方法"><a href="#了解所有生命周期方法" class="headerlink" title="了解所有生命周期方法"></a>了解所有生命周期方法</h4><p>即使在一个很大的 React 应用当中，除了 constructor() 和 render() 比较常用 外，你只会用到一小部分生命周期函数。即使这样，了解每个生命周期方法的适用场景还 是对你有帮助的:</p>
+<ul>
+<li><strong>constructor(props)</strong> - 它在组件初始化时被调用。在这个方法中，你可以设置初始化状 态以及绑定类方法。</li>
+<li><strong>componentWillMount()</strong> - 它在 render() 方法之前被调用。这就是为什么它可以用作 去设置组件内部的状态，因为它不会触发组件的再次渲染。但一般来说，还是推荐 在 constructor() 中去初始化状态。</li>
+<li><strong>render()</strong> - 这个生命周期方法是必须有的，它返回作为组件输出的元素。这个方法应 该是一个纯函数，因此不应该在这个方法中修改组件的状态。它把属性和状态作为 输入并且返回(需要渲染的)元素</li>
+<li><strong>componentDidMount()</strong> - 它仅在组件挂载后执行一次。这是发起异步请求去 API 获取 数据的绝佳时期。获取到的数据将被保存在内部组件的状态中然后在 render() 生命 周期方法中展示出来。</li>
+<li><strong>componentWillReceiveProps(nextProps)</strong>-当传递给组件的props发生改变时，组件的componentWillReceiveProps即会被触发调用，方法传递的参数的是发更更改的之后的props值（通常我们命名为nextProps）。在这个方法里，你可以通过this.props访问当前的属性值，可以通过nextProps访问即将更新的属性值，或者将它们进行对比，或者将它们进行计算，最终确定你需要更新的状态（state）并最终调用setState方法对状态进行更新。在这个钩子函数中调用setState方法并不会触发再一次渲染。</li>
+<li><strong>shouldComponentUpdate(nextProps, nextState)</strong> - 每次组件因为状态或者属性更改而 更新时，它都会被调用。你将在成熟的 React 应用中使用它来进行性能优化。在一个 更新生命周期中，组件及其子组件将根据该方法返回的布尔值来决定是否重新渲染。 这样你可以阻止组件的渲染生命周期(render lifecycle)方法，避免不必要的渲染。</li>
+<li><strong>componentWillUpdate(nextProps, nextState)</strong> - 这个方法是 render() 执行之前的最后 一个方法。你已经拥有下一个属性和状态，它们可以在这个方法中任由你处 置。你可以利用这个方法在渲染之前进行最后的准备。注意在这个生命周期方 法中你不能再触发 setState()。如果你想基于新的属性计算状态，你必须利用 componentWillReceiveProps()。</li>
+<li><strong>componentDidUpdate(prevProps, prevState)</strong> - 这个方法在 render() 之后立即调用。你 可以用它当成操作 DOM 或者执行更多异步请求的机会。</li>
+<li><strong>componentWillUnmount()</strong> - 它会在组件销毁之前被调用。你可以利用这个生命周期 方法去执行任何清理任务。</li>
+</ul>
+<p>之前你已经用过了 constructor() 和 render() 生命周期方法。对于 ES6 类组件来说他们是 常用的生命周期方法。实际上 render() 是必须有的，否则它将不会返回一个组件实例。<br>还有另一个生命周期方法:componentDidCatch(error, info)。它在 React 1681 中引入，用来 捕获组件的错误。举例来说，在你的应用中展示样本数据本来是没问题的。但是可能会有 列表的本地状态被意外设置成 null 的情况发生(例如从外部 API 获取列表失败时，你把本 地状态设置为空了)。然后它就不能像之前一样去过滤(filter)和映射(map)这个列表，<br>因为它不是一个空列表([])而是 null。这时组件就会崩溃，然后整个应用就会挂掉。现 在你可以用 componentDidCatch() 来捕获错误，将它存在本地的状态中，然后像用户展示一 条信息，说明应用发生了错误。</p>
+<h4 id="生命周期相关改动"><a href="#生命周期相关改动" class="headerlink" title="生命周期相关改动"></a>生命周期相关改动</h4><p>为了支持未来的异步渲染特性，以下生命周期函数将被废弃<br>componentWillMount 请使用 componentDidMount代替<br>componentWillUpdate 请使用 componentDidUpdate代替<br>componentWillReceiveProps 请使用新增的 static getDerivedStateFromProps代替<br>废弃警告会在React 16.4开启，废弃的函数预计在React 17.0移除<br>static getDerivedStateFromProps<br>作为被废弃的componentWillReceiveProps的替代，React提供了一个新的函数static getDerivedStateFromProps(nextProps, prevState)</p>
+<p>注意前面的static，这意味着在这个函数中我们不能使用this, 该函数的返回值将用于更新state。如果不需要更新state，就返回null<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> getDerivedStateFromProps(nextProps, prevState) &#123;</span><br><span class="line">  <span class="keyword">if</span> (nextProps.text === prevState.text) <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">  <span class="keyword">return</span> &#123; <span class="attr">text</span>: nextProps.text &#125;; <span class="comment">// 相当于setState(&#123; text: nextProps.text &#125;);</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="扩展操作符"><a href="#扩展操作符" class="headerlink" title="扩展操作符"></a>扩展操作符</h4><p>下面这个方法处理过滤数据列表<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">onDismiss(id) &#123;</span><br><span class="line"><span class="keyword">const</span> isNotId = <span class="function"><span class="params">item</span> =&gt;</span> item.objectID !== id;</span><br><span class="line"><span class="keyword">const</span> updatedHits = <span class="keyword">this</span>.state.result.hits.filter(isNotId); <span class="keyword">this</span>.setState(&#123;</span><br><span class="line">...</span><br><span class="line"> &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>那现在 setState() 中发生了什么呢?很遗憾，这个 result 是一个复杂的对象。资讯(hits) 列表只是这个对象的众多属性之一。所以，当某一项资讯从 result 对象中移除时，只能更 新资讯列表，其他的属性还是得保持原样。<br>解决方法之一是直接改变 result 对象中的 hits 字段。我将演示这个方法，但实际操作中我 们一般不这样做。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 不要这样做</span></span><br><span class="line"><span class="keyword">this</span>.state.result.hits = updatedHits;</span><br></pre></td></tr></table></figure></p>
+<p>React 拥护不可变的数据结构。因此你不应该改变一个对象(或者直接改变状态)。更好的 做法是基于现在拥有的资源来创建一个新的对象。这样就没有任何对象被改变了。这样做 的好处是数据结构将保持不变，因为你总是返回一个新对象，而之前的对象保持不变。<br>因此你可以用 JavaScript ES6 中的 <strong>Object.assign()</strong> 函数来到达这样的目的。它把接收的第 一个参数作为目标对象，后面的所有参数作为源对象。然后把所有的源对象合并到目标对 象中。只要把目标对象设置成一个空对象，我们就得到了一个新的对象。这种做法是拥抱 不变性的，因为没有任何源对象被改变。以下是代码实现：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> updatedHits = &#123; <span class="attr">hits</span>: updatedHits &#125;;</span><br><span class="line"><span class="keyword">const</span> updatedResult = <span class="built_in">Object</span>.assign(&#123;&#125;, <span class="keyword">this</span>.state.result, updatedHits);</span><br></pre></td></tr></table></figure></p>
+<p>当遇到相同的属性时，排在后面的对象会覆写先前对象的该属性。现在让我们用它来改写 onDismiss() 方法:<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">onDismiss(id) &#123;</span><br><span class="line">  <span class="keyword">const</span> isNotId = <span class="function"><span class="params">item</span> =&gt;</span> item.objectID !== id;</span><br><span class="line">  <span class="keyword">const</span> updatedHits = <span class="keyword">this</span>.state.result.hits.filter(isNotId);</span><br><span class="line">  <span class="keyword">this</span>.setState(&#123;</span><br><span class="line">    result: <span class="built_in">Object</span>.assign(&#123;&#125;, <span class="keyword">this</span>.state.result, &#123; <span class="attr">hits</span>: updatedHits &#125;)</span><br><span class="line">&#125;); &#125;</span><br></pre></td></tr></table></figure></p>
+<p>这已经是一个解决方案了。但是在 JavaScript ES6 以及之后的 JavaScript 版本中还有一个更 简单的方法。现在我将向你介绍扩展操作符。它只由三个点组成:…。当使用它时，数组 或对象中的每一个值都会被拷贝到一个新的数组或对象。<br>让我们先来看一下 ES6 中数组的扩展运算符，虽然你现在还用不到它。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> userList = [<span class="string">'Robin'</span>, <span class="string">'Andrew'</span>, <span class="string">'Dan'</span>]; <span class="keyword">const</span> additionalUser = <span class="string">'Jordan'</span>;</span><br><span class="line"><span class="keyword">const</span> allUsers = [ ...userList, additionalUser ];</span><br><span class="line"><span class="built_in">console</span>.log(allUsers);</span><br><span class="line"><span class="comment">// output: ['Robin', 'Andrew', 'Dan', 'Jordan']</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*这里 allUsers 是一个全新的数组变量，而变量 userList 和 additionalUser 还是和原来一 样。用这个运算符，你甚至可以合并两个数组到一个新的数组中。*/</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> oldUsers = [<span class="string">'Robin'</span>, <span class="string">'Andrew'</span>];</span><br><span class="line"><span class="keyword">const</span> newUsers = [<span class="string">'Dan'</span>, <span class="string">'Jordan'</span>];</span><br><span class="line"><span class="keyword">const</span> allUsers = [ ...oldUsers, ...newUsers ];</span><br><span class="line"><span class="built_in">console</span>.log(allUsers);</span><br><span class="line"><span class="comment">// output: ['Robin', 'Andrew', 'Dan', 'Jordan']</span></span><br></pre></td></tr></table></figure></p>
+<p>现在让我们来看看对象的扩展运算符。它并不是 JavaScript ES6 中的用法。它是针对下一 个 JavaScript 版本的提出的<strong>92</strong>，然而它已经在 React 社区开始使用了。这就是为什么需要在 create-react-app 配置中加入了这个功能。<br>本质上来说，对象的扩展运算符和数组的扩展运算符是一样的，只是用在了对象上。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> userNames = &#123; <span class="attr">firstname</span>: <span class="string">'Robin'</span>, <span class="attr">lastname</span>: <span class="string">'Wieruch'</span> &#125;; <span class="keyword">const</span> age = <span class="number">28</span>;</span><br><span class="line"><span class="keyword">const</span> user = &#123; ...userNames, age &#125;;</span><br><span class="line"><span class="built_in">console</span>.log(user);</span><br><span class="line"><span class="comment">// output: &#123; firstname: 'Robin', lastname: 'Wieruch', age: 28 &#125;</span></span><br></pre></td></tr></table></figure>
+<p>类似于之前数组的例子，以下是扩展多个对象的例子。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> userNames = &#123; <span class="attr">firstname</span>: <span class="string">'Robin'</span>, <span class="attr">lastname</span>: <span class="string">'Wieruch'</span> &#125;; <span class="keyword">const</span> userAge = &#123; <span class="attr">age</span>: <span class="number">28</span> &#125;;</span><br><span class="line"><span class="keyword">const</span> user = &#123; ...userNames, ...userAge &#125;;</span><br><span class="line"><span class="built_in">console</span>.log(user);</span><br><span class="line"><span class="comment">// output: &#123; firstname: 'Robin', lastname: 'Wieruch', age: 28 &#125;</span></span><br></pre></td></tr></table></figure></p>
+<p>最终，它可以用来代替 Object.assign()。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">onDismiss(id) &#123;</span><br><span class="line">  <span class="keyword">const</span> isNotId = <span class="function"><span class="params">item</span> =&gt;</span> item.objectID !== id;</span><br><span class="line">  <span class="keyword">const</span> updatedHits = <span class="keyword">this</span>.state.result.hits.filter(isNotId);</span><br><span class="line">  <span class="keyword">this</span>.setState(&#123;</span><br><span class="line">    result: &#123; ...this.state.result, <span class="attr">hits</span>: updatedHits &#125;</span><br><span class="line">&#125;); &#125;</span><br></pre></td></tr></table></figure>
+<p>未完待续。、、、、</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/读书笔记/" rel="tag"># 读书笔记</a>
+          
+            <a href="/tags/js/" rel="tag"># js</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/24/如何做到前端工程化/" rel="next" title="如何做到前端工程化（vue权威指南读书笔记）">
+                <i class="fa fa-chevron-left"></i> 如何做到前端工程化（vue权威指南读书笔记）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/02/01/es6概况整理/" rel="prev" title="es6概况整理">
+                es6概况整理 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zNDU0NS8xMTA4Mw=="></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/assets/img/head.jpg" alt="Terry">
+          <p class="site-author-name" itemprop="name">Terry</p>
+           
+              <p class="site-description motion-element" itemprop="description">web前端码农一枚。</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">39</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">36</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#react笔记概念"><span class="nav-number">1.</span> <span class="nav-text">react笔记概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#react生命周期大致分为三个阶段"><span class="nav-number">2.</span> <span class="nav-text">react生命周期大致分为三个阶段</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#第一阶段：是组件挂载阶段"><span class="nav-number">2.1.</span> <span class="nav-text">第一阶段：是组件挂载阶段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第二阶段：是组件在运行和交互阶段"><span class="nav-number">2.2.</span> <span class="nav-text">第二阶段：是组件在运行和交互阶段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第三阶段：是组件卸载阶段"><span class="nav-number">2.3.</span> <span class="nav-text">第三阶段：是组件卸载阶段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#说明"><span class="nav-number">2.4.</span> <span class="nav-text">说明</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#状态或者属性改变"><span class="nav-number">2.4.1.</span> <span class="nav-text">状态或者属性改变</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#了解所有生命周期方法"><span class="nav-number">2.4.2.</span> <span class="nav-text">了解所有生命周期方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#生命周期相关改动"><span class="nav-number">2.4.3.</span> <span class="nav-text">生命周期相关改动</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#扩展操作符"><span class="nav-number">2.4.4.</span> <span class="nav-text">扩展操作符</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Terry</span>
+</div>
+
+
+<div class="powered-by">
+  你的一生
+</div>
+
+<div class="theme-info">
+  我只借一程,这一程便是余生!
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("SaEXOxIfsJ9uLvvd22739AQs-gzGzoHsz", "w1oRPqsaYjjTCdmTIY3S3AxX");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

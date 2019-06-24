@@ -1,0 +1,965 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="读书笔记,编程思想,函数式编程,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1">
+
+
+
+
+
+
+<meta name="description" content="面向对象编程“面向对象”的具体含义，以及这 种程序设计风格的主要特征。面向对象程序设计(OOP)中最常用到的概念:  对象、方法、属性; 类; 封装; 聚合; 重用与继承; 多态。">
+<meta name="keywords" content="读书笔记,编程思想,函数式编程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="面向对象编程(javascript)">
+<meta property="og:url" content="https://592php.github.io/2018/03/05/JavaScript 多范式编程语言/index.html">
+<meta property="og:site_name" content="Terry的博客">
+<meta property="og:description" content="面向对象编程“面向对象”的具体含义，以及这 种程序设计风格的主要特征。面向对象程序设计(OOP)中最常用到的概念:  对象、方法、属性; 类; 封装; 聚合; 重用与继承; 多态。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-04-08T02:02:39.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="面向对象编程(javascript)">
+<meta name="twitter:description" content="面向对象编程“面向对象”的具体含义，以及这 种程序设计风格的主要特征。面向对象程序设计(OOP)中最常用到的概念:  对象、方法、属性; 类; 封装; 聚合; 重用与继承; 多态。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://592php.github.io/2018/03/05/JavaScript 多范式编程语言/">
+
+
+
+
+
+  <title>面向对象编程(javascript) | Terry的博客</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-115087671-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Terry的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">我不怕千万人阻挡,只怕自己投降!</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://592php.github.io/2018/03/05/JavaScript 多范式编程语言/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Terry">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/assets/img/head.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Terry的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">面向对象编程(javascript)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-05T23:14:52+08:00">
+                2018-03-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/js/" itemprop="url" rel="index">
+                    <span itemprop="name">js</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/03/05/JavaScript 多范式编程语言/" class="leancloud_visitors" data-flag-title="面向对象编程(javascript)">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="面向对象编程"><a href="#面向对象编程" class="headerlink" title="面向对象编程"></a>面向对象编程</h3><p>“面向对象”的具体含义，以及这 种程序设计风格的主要特征。<br>面向对象程序设计(OOP)中最常用到的概念:</p>
+<ul>
+<li>对象、方法、属性;</li>
+<li>类;</li>
+<li>封装;</li>
+<li>聚合;</li>
+<li>重用与继承;</li>
+<li>多态。<a id="more"></a>
+<h3 id="对象"><a href="#对象" class="headerlink" title="对象"></a>对象</h3>实 质上就是指“事物”(包括人和物)在程序设计语言中的表现形式。这里的“事物”可以是 任何东西(如某个客观存在的对象，或者某些较为抽象的概念)。例如，对于猫这种常见对 象来说，我们可以看到它们具有某些明确的特征(如颜色、名字、体型等)，能执行某些动 作(如喵喵叫、睡觉、躲起来、逃跑等)。在 OOP 语义中，这些对象特征都叫做属性，而 那些动作则被称为方法。<h3 id="类"><a href="#类" class="headerlink" title="类"></a>类</h3>在现实生活中，相似对象之间往往都有一些共同的组成特征。例如蜂鸟和老鹰都具有 鸟类的特征，因此它们可以被统称为鸟类。在 OOP 中，类实际上就是对象的设计蓝图或制 作配方。“对象”这个词，我们有时候也叫做“实例”，所以我们可以说老鹰是鸟类的一个 实例1。我们可以基于同一个类创建出许多不同的对象。因为类更多的是一种模板，而对象 则是在这些模板的基础上被创建出来的实体。<br>JavaScript 与 C++或 Java 这种传统的面向对象语言不同，它实际上压 根儿没有类。该语言的一切都是基于对象的，其依靠的是一套原型(prototype)系统。而 原型本身实际上也是一种对象。<h3 id="封装"><a href="#封装" class="headerlink" title="封装"></a>封装</h3></li>
+</ul>
+<p>除此之外，这个术语中还有另一层信息隐藏的概念，这完全是另一方面的问题。因此， 我们在理解这个概念时，必须要留意它在 OOP 中的具体语境。<br>以一个 MP3 播放器为例。如果我们假设它是一个对象，那么作为该对象的用户，我们 无疑需要一些类似于像按钮、显示屏这样的工作接口。这些接口会帮助我们使用该对象(如 播放歌曲之类)。至于它们内部是如何工作的，我们并不清楚，而且大多数情况下也不会在 乎这些。换句话说，这些接口的实现对我们来说是隐藏的。同样的，在 OOP 中也是如此。 当我们在代码中调用一个对象的方法时，无论该对象是来自我们自己的实现还是某个第三 方库，我们都不需要知道该方法是如何工作的。在编译型语言中，我们甚至都无法查看这些 对象的工作代码。由于 JavaScript 是一种解释型语言，源代码是可以查看的。但至少在封装概念上它们是一致的，即我们只需要知道所操作对象的接口，而不必去关心它的具体实现。<br>关于信息隐藏，还有另一方面内容，即方法与属性的可见性。在某些语言中，我们能通 过 public、private、protected 这些关键字来限定方法和属性的可见性。这种限定分类定义了 对象用户所能访问的层次。例如，private 方法只有其所在对象内部的代码才有权访问，而 public 方法则是任何人都能访问的。在 JavaScript 中，尽管所有的方法和属性都是 public 的， 但是我们将会看到，该语言还是提供了一些隐藏数据的方法，以保护程序的隐密性。</p>
+<h3 id="聚合"><a href="#聚合" class="headerlink" title="聚合"></a>聚合</h3><p>所谓聚合，有时候也叫做组合，实际上是指我们将几个现有对象合并成一个新对象的 过程。总之，这个概念所强调的就是这种将多个对象合而为一的能力。通过聚合这种强有 力的方法，我们可以将一个问题分解成多个更小的问题。这样一来，问题就会显得更易于 管理(便于我们各个击破)。当一个问题域的复杂程度令我们难以接受时，我们就可以考虑 将它分解成若干子问题区，并且必要的话，这些问题区还可以再继续分解成更小的分区。 这样做有利于我们从几个不同的抽象层次来考虑这个问题。</p>
+<h3 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h3><p>过继承这种方式，我们可以非常优雅地实现对现有代码的重用。例如，我们有一个 叫做 Person 的一般性对象，其中包含一些姓名、出生日期之类的属性，以及一些功能性函 数，如步行、谈话、睡觉、吃饭等。然后，当我们发现自己需要一个 Programmer 对象时， 当然，这时候你可以再将 Person 对象中所有的方法与属性重新实现一遍，但除此之外还有 一种更聪明的做法，即我们可以让 Programmer 继承自 Person，这样就省去了我们不少工作。 因为 Programmer 对象只需要实现属于它自己的那部分特殊功能(例如“编写代码”)，而其 余部分只需重用 Person 的实现即可。<br>在传统的 OOP 环境中，继承通常指的是类与类之间的关系，但由于 JavaScript 中不存 在类，因此它的继承只能发生在对象之间。<br>当一个对象继承自另一个对象时，通常会往其中加入新的方法，以扩展被继承的老对 象。我们通常将这一过程称之为“B 继承自 A”或者“B 扩展自 A”。另外对于新对象来说， 它也可以根据自己的需要，从继承的那组方法中选择几个来重新定义。这样做并不会改变 对象的接口，因为其方法名是相同的，只不过当我们调用新对象时，该方法的行为与之前 不同了。我们将这种重定义继承方法的过程叫做覆写。</p>
+<h3 id="多态"><a href="#多态" class="headerlink" title="多态"></a>多态</h3><p>在之前的例子中，我们的 Programmer 对象继承了上一级对象 Person 的所有方法。这 意味着这两个对象都实现了“talk”等方法。现在，我们的代码中有一个叫做 Bob 的变量， 即便是在我们不知道它是一个 Person 对象还是一个 Programmer 对象情况下，也依然可以 直接调用该对象的“talk”方法，而不必担心这会影响代码的正常工作。类似这种不同对象 通过相同的方法调用来实现各自行为的能力，我们就称之为多态。</p>
+<h3 id="OOP-小结"><a href="#OOP-小结" class="headerlink" title="OOP 小结"></a>OOP 小结</h3><table>
+<thead>
+<tr>
+<th>特征描述</th>
+<th>相应概念</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>小明是一个男人</td>
+<td>对象</td>
+</tr>
+<tr>
+<td>男性，18岁，黑头发</td>
+<td>属性</td>
+</tr>
+<tr>
+<td>小明会，打篮球，写代码，泡妞</td>
+<td>方法</td>
+</tr>
+<tr>
+<td>小明是 Programmer 类的一个实例</td>
+<td>传统 OOP 中的类</td>
+</tr>
+<tr>
+<td>小明是一个由 Programmer 对象扩展而来的新对象</td>
+<td>基于原型 OOP 中的原型对象</td>
+</tr>
+<tr>
+<td>小明对象中包含了数据(例如18岁)和基于这些数据的方法(记录年龄)</td>
+<td>封装</td>
+</tr>
+<tr>
+<td> 些私有数据，例如对闰年二月的天数，我们就不知道，而且也不会想知道</td>
+<td>信息隐藏</td>
+</tr>
+<tr>
+<td> 是是整个 Web 开发团队对象的一部分，此外开发团队对象还包含 了一个 Designer 对象 小红，以及一个 ProjectManager 对象 小黑</td>
+<td>聚合、组合</td>
+</tr>
+<tr>
+<td>Designer、ProjectManager、Programmer 都是分别扩展自 Person对象的新对象</td>
+<td>继承</td>
+</tr>
+<tr>
+<td>我们可以随时调用 小明，小黑 和 和小红 这三个对象各自的 (打球) 方法，尽管这些方法会产生不同的结果(如 小红可能是后卫），小黑是小前锋，而小黑可能是大前锋)。总之，每个对象都可以重新自定义它们的继承方法 （打球）</td>
+<td>多态、方法覆写</td>
+</tr>
+</tbody>
+</table>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/读书笔记/" rel="tag"># 读书笔记</a>
+          
+            <a href="/tags/编程思想/" rel="tag"># 编程思想</a>
+          
+            <a href="/tags/函数式编程/" rel="tag"># 函数式编程</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/02/28/javascript知识点总结/" rel="next" title="javascript知识点总结">
+                <i class="fa fa-chevron-left"></i> javascript知识点总结
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/08/css3之border-radius/" rel="prev" title="css3之border-radius">
+                css3之border-radius <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zNDU0NS8xMTA4Mw=="></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/assets/img/head.jpg" alt="Terry">
+          <p class="site-author-name" itemprop="name">Terry</p>
+           
+              <p class="site-description motion-element" itemprop="description">web前端码农一枚。</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">39</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">36</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#面向对象编程"><span class="nav-number">1.</span> <span class="nav-text">面向对象编程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对象"><span class="nav-number">2.</span> <span class="nav-text">对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类"><span class="nav-number">3.</span> <span class="nav-text">类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#封装"><span class="nav-number">4.</span> <span class="nav-text">封装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#聚合"><span class="nav-number">5.</span> <span class="nav-text">聚合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#继承"><span class="nav-number">6.</span> <span class="nav-text">继承</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多态"><span class="nav-number">7.</span> <span class="nav-text">多态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OOP-小结"><span class="nav-number">8.</span> <span class="nav-text">OOP 小结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Terry</span>
+</div>
+
+
+<div class="powered-by">
+  你的一生
+</div>
+
+<div class="theme-info">
+  我只借一程,这一程便是余生!
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("SaEXOxIfsJ9uLvvd22739AQs-gzGzoHsz", "w1oRPqsaYjjTCdmTIY3S3AxX");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

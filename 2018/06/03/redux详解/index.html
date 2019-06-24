@@ -1,0 +1,923 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="状态管理,redux,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1">
+
+
+
+
+
+
+<meta name="description" content="在本节中，我们将从 源码的角度深入了解 Redux 中 createStore 方法的具体实现，详细了解 Redux 的工作原理。">
+<meta name="keywords" content="状态管理,redux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="redux详解">
+<meta property="og:url" content="https://592php.github.io/2018/06/03/redux详解/index.html">
+<meta property="og:site_name" content="Terry的博客">
+<meta property="og:description" content="在本节中，我们将从 源码的角度深入了解 Redux 中 createStore 方法的具体实现，详细了解 Redux 的工作原理。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-08-06T08:00:57.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="redux详解">
+<meta name="twitter:description" content="在本节中，我们将从 源码的角度深入了解 Redux 中 createStore 方法的具体实现，详细了解 Redux 的工作原理。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://592php.github.io/2018/06/03/redux详解/">
+
+
+
+
+
+  <title>redux详解 | Terry的博客</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-115087671-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Terry的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">我不怕千万人阻挡,只怕自己投降!</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://592php.github.io/2018/06/03/redux详解/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Terry">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/assets/img/head.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Terry的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">redux详解</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-03T18:41:21+08:00">
+                2018-06-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/react/" itemprop="url" rel="index">
+                    <span itemprop="name">react</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/06/03/redux详解/" class="leancloud_visitors" data-flag-title="redux详解">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在本节中，我们将从 源码的角度深入了解 Redux 中 createStore 方法的具体实现，详细了解 Redux 的工作原理。</p>
+<a id="more"></a>
+<h2 id="Redux-核心-API"><a href="#Redux-核心-API" class="headerlink" title="Redux 核心 API"></a>Redux 核心 API</h2><p>Redux 的核心是一个 store，这个 store 由 Redux 提供的 createStore(reducers[, initialState]) 方法生成。从函数签名看出，要想生成 store，必须要传入 reducers，同时也可以传入第二个可选 参数初始化状态(initialState)。<br>在继续了解 createStore 之前，让我们先认识一下 reducers。在上一章介绍 Flux 时我们说到， Flux 的核心思想之一就是不直接修改数据，而是分发一个 action 来描述发生的改变。那么，在 Redux 里由谁来修改数据呢?<br>在 Redux 里，负责响应 action 并修改数据的角色就是 reducer。reducer 本质上是一个函数， 其函数签名为 reducer(previousState, action) =&gt; newState。可以看出，reducer 在处理 action 的 同时，还需要接受一个 previousState 参数。所以，reducer 的职责就是根据 previousState 和 action 计算出新的 newState。<br>在实际应用中，reducer 在处理 previousState 时，还需要有一个特殊的非空判断。很显然， reducer 第一次执行的时候，并没有任何的 previousState，而 reducer 的最终职责是返回新的 state， 因此需要在这种特殊情况下返回一个定义好的 initialState:</p>
+<h3 id="Redux-中最核心的-API——createStore"><a href="#Redux-中最核心的-API——createStore" class="headerlink" title="Redux 中最核心的 API——createStore"></a>Redux 中最核心的 API——createStore</h3><p>const store = createStore(reducers);<br>通过 createStore 方法创建的 store 是一个对象，它本身又包含 4 个方法。</p>
+<ul>
+<li>getState():获取 store 中当前的状态。</li>
+<li>dispatch(action):分发一个 action，并返回这个 action，这是唯一能改变 store 中数据的<br>方式。</li>
+<li>subscribe(listener):注册一个监听者，它在 store 发生变化时被调用。</li>
+<li>replaceReducer(nextReducer):更新当前 store 里的 reducer，一般只会在开发模式中调用<br>该方法。<br>在实际使用中，我们最常用的是 getState() 和 dispatch() 这两个方法。至于 subscribe() 和replaceReducer()方法，一般会在 Redux 与某个系统(如 React)做桥接的时候使用。<h3 id="connect-和Provider"><a href="#connect-和Provider" class="headerlink" title="connect() 和Provider"></a>connect() 和Provider</h3>前面说到 Redux 的核心只有一个 createStore() 方法，但是仅仅使用这个方法还不足以让 Redux 在我们的 React 应用中发挥作用。我们还需要 react-redux 库——Redux 官方提供的 React 绑定。<br>很多刚刚接触 React 和 Redux 的开发者可能会好奇，明明有了 Redux，为什么还需要 react-redux，为什么不把它们放在一起?事实上，这是一种前端框架或类库的架构趋势，即尽可 能做到平台无关(platform agnostic)。我们在第1章中也提到过，即便是 React，也在 0.14 版本之 后拆分了 React 和 ReactDOM 两个库。这样拆分的好处在于，一个类库从核心逻辑上、具体与平 台相关的实现上这两个层面做了拆分，能保证核心功能做到最大程度的跨平台复用。<br>react-redux 提供了一个组件和一个 API 帮助 Redux 和 React 进行绑定，一个是 React 组件 <provider> ，一个是 connect()。关于它们，只需要知道的是， <provider> 接受一个 store 作为props，它是整个 Redux 应用的顶层组件，而 connect() 提供了在整个 React 应用的任意组件中获取 store 中数据的功能。<br>顾名思义，react-redux 为我们提供了 React 与 Redux 之间的绑定，也就是我们在例子中使用 的 Provider 和 connect 方法。在本节中，我们将从源代码层面详细解读 react-redux 的设计思路以 及实现原理。<h4 id="Provider"><a href="#Provider" class="headerlink" title="Provider"></a>Provider</h4>在我们的例子中，Provider 是整个应用最外层的 React 组件，它接受一个 store 作为 props。 除此之外，似乎没有什么特别之处。那么，Provider 拿到这个 store 做了什么处理呢?让我们看看 Provider 的源码:<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="class"><span class="keyword">class</span> <span class="title">Provider</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line">  getChildContext() &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      store: <span class="keyword">this</span>.store</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">constructor</span>(props, context) &#123;</span><br><span class="line">    <span class="keyword">super</span>(props, context)</span><br><span class="line">    <span class="keyword">this</span>.store = props.store</span><br><span class="line">  &#125;</span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123;</span><br><span class="line">      children</span><br><span class="line">    &#125; = <span class="keyword">this</span>.props</span><br><span class="line">    <span class="keyword">return</span> Children.only(children)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</provider></provider></li>
+</ul>
+<p>以上是 react-redux 中 Provider 的部分源代码。可以看到，其实 Provider 的实现非常简单。在 constructor中，拿到props中的store，并挂载在当前实例上。同时定义了getChildContext方法， 该方法定义了自动沿组件传递的特殊 props。<br>除了 context，Provider 的源代码中还有如下几行特殊的定义:<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (process.env.NODE_ENV !== <span class="string">'production'</span>) &#123;</span><br><span class="line">  Provider.prototype.componentWillReceiveProps = <span class="function"><span class="keyword">function</span> (<span class="params">nextProps</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> &#123;</span><br><span class="line">      store</span><br><span class="line">    &#125; = <span class="keyword">this</span></span><br><span class="line">    <span class="keyword">const</span> &#123;</span><br><span class="line">      store: nextStore</span><br><span class="line">    &#125; = nextProps</span><br><span class="line">    <span class="keyword">if</span> (store !== nextStore) &#123;</span><br><span class="line">      warnAboutReceivingStore()</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="connect"><a href="#connect" class="headerlink" title="connect"></a>connect</h4><p>相比于 Provider，connect 的实现就复杂得多，毕竟 connect 这个函数接受的参数多达 4 个， 每个参数又有若干种可选形式。若想了解 connect 的作用和原理，还需要一步一步理清 connect 的 具体实现。<br>首先，让我们看看 connect 函数的代码结构:<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> hoistStatics <span class="keyword">from</span> <span class="string">'hoist-non-react-statics'</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span> <span class="title">connect</span>(<span class="params">mapStateToProps, mapDispatchToProps, mergeProps, options = &#123;&#125;</span>) </span>&#123; <span class="comment">// ...</span></span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="title">wrapWithConnect</span>(<span class="params">WrappedComponent</span>) </span>&#123; <span class="comment">// ...</span></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">Connect</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123; <span class="comment">// ...</span></span><br><span class="line">      render() &#123; <span class="comment">// ...</span></span><br><span class="line">        <span class="keyword">if</span> (withRef) &#123;</span><br><span class="line">          <span class="keyword">this</span>.renderedElement = createElement(WrappedComponent, &#123;</span><br><span class="line">            ...this.mergedProps,</span><br><span class="line">            ref: <span class="string">'wrappedInstance'</span></span><br><span class="line">          &#125;)</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          <span class="keyword">this</span>.renderedElement = createElement(WrappedComponent,</span><br><span class="line">            <span class="keyword">this</span>.mergedProps)</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.renderedElement</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="keyword">return</span> hoistStatcis(Connect, WrappedComponent);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>可以看出，connect 函数本身返回名为 wrapWithConnect 的函数，而这个函数才是真正用来 装饰 React 组件的。而在我们装饰一个 React 组件时，其实就是把组件在 Connect 类的 render 方 法中进行渲染，并获取 connect 中传入的各种额外数据。</p>
+<h5 id="mapStateToProps"><a href="#mapStateToProps" class="headerlink" title="mapStateToProps"></a>mapStateToProps</h5><p>connect 的第一个参数定义了我们需要从 Redux 状态树中提取哪些部分当作 props 传给当前 组件。一般来说，这也是我们使用 connect 时经常传入的参数。事实上，如果不传入这个参数， React 组件将永远不会和 Redux 的状态树产生任何关系。具体在源代码中的表现为:<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span> <span class="title">connect</span>(<span class="params">mapStateToProps, mapDispatchToProps, mergeProps, options = &#123;&#125;</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> shouldSubscribe = <span class="built_in">Boolean</span>(mapStateToProps)</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="class"><span class="keyword">class</span> <span class="title">Connect</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    trySubscribe() &#123;</span><br><span class="line">      <span class="keyword">if</span> (shouldSubscribe &amp;&amp; !<span class="keyword">this</span>.unsubscribe) &#123;</span><br><span class="line">        <span class="keyword">this</span>.unsubscribe = <span class="keyword">this</span>.store.subscribe(<span class="keyword">this</span>.handleChange.bind(<span class="keyword">this</span>))</span><br><span class="line">        <span class="keyword">this</span>.handleChange()</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// ... </span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>因此，如果尝试使用 connect 让组件与 Redux 状态树产生关联，第一个参数 mapStat eToProps可以说是必传的。<br>那么，我们传入的 mapStateToProps 是怎么生效的呢?看看 Connect 类中定义的configureFinalMapState 方法就能略知一二:<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> mapState = mapStateToProps || defaultMapStateToProps</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Connect</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line">  configureFinalMapState(store, props) &#123;</span><br><span class="line">    <span class="keyword">const</span> mappedState = mapState(store.getState(), props)</span><br><span class="line">    <span class="keyword">const</span> isFactory = <span class="keyword">typeof</span> mappedState === <span class="string">'function'</span></span><br><span class="line">    <span class="keyword">this</span>.finalMapStateToProps = isFactory ? mappedState : mapState</span><br><span class="line">    <span class="keyword">this</span>.doStatePropsDependOnOwnProps = <span class="keyword">this</span>.finalMapStateToProps.length !== <span class="number">1</span></span><br><span class="line">    <span class="keyword">if</span> (isFactory) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">this</span>.computeStateProps(store, props)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (process.env.NODE_ENV !== <span class="string">'production'</span>) &#123;</span><br><span class="line">      checkStateShape(mappedState, <span class="string">'mapStateToProps'</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> mappedState</span><br><span class="line">  &#125;</span><br><span class="line">  computeStateProps(store, props) &#123;</span><br><span class="line">    <span class="keyword">if</span> (!<span class="keyword">this</span>.finalMapStateToProps) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">this</span>.configureFinalMapState(store, props)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">const</span> state = store.getState()</span><br><span class="line">    <span class="keyword">const</span> stateProps = <span class="keyword">this</span>.doStatePropsDependOnOwnProps ?</span><br><span class="line">      <span class="keyword">this</span>.finalMapStateToProps(state, props) : <span class="keyword">this</span>.finalMapStateToProps(state)</span><br><span class="line">    <span class="keyword">if</span> (process.env.NODE_ENV !== <span class="string">'production'</span>) &#123;</span><br><span class="line">      checkStateShape(stateProps, <span class="string">'mapStateToProps'</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> stateProps</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>首先，我们对 connect 中传入的 mapStateToProps 参数做了默认参数校验，若没有传入，则使 用 defaultMapStateToProps。defaultMapStateToProps 只是一个返回空对象的方法而已。<br>在最终渲染被 connect 装饰过的组件时，会调用 this.computeStateProps 计算出最终从 Redux 状态树中提取出了哪些值作为当前组件的 props。<br>而在计算之前，又会校验当前组件是否有定义 finalMapStateToProps，若没有，则返回 this.configureFinalMapState 的调用结果。那么 configureFinalMapState 里又做了什么处理呢?<br>首先，将当前的 store 和 props 作为参数传给 mapState，得到执行的结果。根据 react-redux 文 档中的说明，一般情况下，传给 connect 的 mapStateToProps 函数必须返回一个对象。但是在某 些特殊情况下，比如需要针对个别组件进行极致优化的时候，mapStateToProps 也可以返回一个 函数。这也是为什么在源代码中需要判断返回的值是否为函数。<br>接下来，如果 mapState 返回的是函数，那么当前组件最终的 mapStateToProps 方法就是我们 传入的第一个参数执行后返回的那个函数，否则就还是原先定义的 mapState 函数。<br>我们可能会疑惑为什么传给 connect 的第一个参数本身是一个函数，react-redux 还允许这个 函数的返回值也是一个函数呢?<br>简单地说，这样设计可以允许我们在 connect 的第一个参数里利用函数闭包进行一些复杂计 算的缓存，从而实现效率优化的目的。</p>
+<h5 id="mapDispatchToProps"><a href="#mapDispatchToProps" class="headerlink" title="mapDispatchToProps"></a>mapDispatchToProps</h5><p>说完了 mapStateToProps，让我们来看看 mapDispatchToProps 方法，这也是 connect 方法接 受的第二个参数。它接受 store 的 dispatch 作为第一个参数，同时接受 this.props 作为可选的第 二个参数。利用这个方法，我们可以在 connect 中方便地将 actionCreator 与 dispatch 绑定在一起<br>(利用 bindActionCreators 方法)，最终绑定好的方法也会作为 props 传给当前组件。<br>具体设计上与 mapStateToProps 的思路基本一致，除了 mapDispatchToProps 接受的第一个参 数是store.dispatch 而不是 store.getState()。<br>项目实例：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; bindActionCreators &#125; <span class="keyword">from</span> <span class="string">'redux'</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; connect &#125; <span class="keyword">from</span> <span class="string">'react-redux'</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; actions <span class="keyword">as</span> usersActions &#125; <span class="keyword">from</span> <span class="string">'../redux/user'</span>;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Content</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  componentWillMount = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">this</span>.props.getUserInfo(); <span class="comment">//通过mapDispatchToProps 绑定之后传给当前组件的方法</span></span><br><span class="line"></span><br><span class="line">  &#125;;</span><br><span class="line">  render()&#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;div&gt;Content&lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">    )</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp">const mapStateToProps = state =&gt; &#123;</span></span><br><span class="line"><span class="regexp">  return &#123;</span></span><br><span class="line"><span class="regexp">    user: state.user &amp;&amp; state.user.info,</span></span><br><span class="line"><span class="regexp">  &#125;;</span></span><br><span class="line"><span class="regexp">&#125;;</span></span><br><span class="line"><span class="regexp">const mapDispatchToProps = dispatch =&gt; (&#123;</span></span><br><span class="line"><span class="regexp">  ...bindActionCreators(usersActions, dispatch),</span></span><br><span class="line"><span class="regexp">&#125;);</span></span><br><span class="line"><span class="regexp">export default connect(mapStateToProps, mapDispatchToProps)(Content),</span></span><br><span class="line"><span class="regexp">);</span></span><br></pre></td></tr></table></figure></p>
+<h5 id="mergeProps"><a href="#mergeProps" class="headerlink" title="mergeProps"></a>mergeProps</h5><p>根据文档中的定义，mergeProps 参数也是一个函数，接受 stateProps、dispatchProps 和 ownProps 作为参数。实际上，stateProps 就是我们传给 connect 的第一个参数 mapStateToProps 最 终返回的 props。同理，dispatchProps 是第二个参数的最终产物，而 ownProps 则是组件自己的 props。这个方法更大程度上只是为了方便对三种来源的 props 进行更好的分类、命名和重组。</p>
+<h5 id="options"><a href="#options" class="headerlink" title="options"></a>options</h5><p>connect 参数接受的最后一个参数是 options，其中包含了两个配置项。</p>
+<ul>
+<li>pure:布尔值，默认为 true。当该配置为 true 时，Connect 中会定义 shouldComponentUpdate 方法并使用浅对比判断前后两次 props 是否发生了变化，以此来减少不必要的刷新。如果 应用严格按照 Redux 的方式进行架构，该配置保持默认即可。</li>
+<li>withRef:布尔值，默认为 false。如果设置为 true，在装饰传入的 React 组件时，Connect 会保存一个对该组件的 refs 引用，你可以通过 getWrappedInstance 方法来获得该 refs， 并最终获得原始的 DOM 节点。</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/状态管理/" rel="tag"># 状态管理</a>
+          
+            <a href="/tags/redux/" rel="tag"># redux</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/21/canvas详解/" rel="next" title="canvas详解">
+                <i class="fa fa-chevron-left"></i> canvas详解
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/06/13/Web安全/" rel="prev" title="Web安全">
+                Web安全 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zNDU0NS8xMTA4Mw=="></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/assets/img/head.jpg" alt="Terry">
+          <p class="site-author-name" itemprop="name">Terry</p>
+           
+              <p class="site-description motion-element" itemprop="description">web前端码农一枚。</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">39</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">36</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Redux-核心-API"><span class="nav-number">1.</span> <span class="nav-text">Redux 核心 API</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Redux-中最核心的-API——createStore"><span class="nav-number">1.1.</span> <span class="nav-text">Redux 中最核心的 API——createStore</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#connect-和Provider"><span class="nav-number">1.2.</span> <span class="nav-text">connect() 和Provider</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Provider"><span class="nav-number">1.2.1.</span> <span class="nav-text">Provider</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#connect"><span class="nav-number">1.2.2.</span> <span class="nav-text">connect</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#mapStateToProps"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">mapStateToProps</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#mapDispatchToProps"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">mapDispatchToProps</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#mergeProps"><span class="nav-number">1.2.2.3.</span> <span class="nav-text">mergeProps</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#options"><span class="nav-number">1.2.2.4.</span> <span class="nav-text">options</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Terry</span>
+</div>
+
+
+<div class="powered-by">
+  你的一生
+</div>
+
+<div class="theme-info">
+  我只借一程,这一程便是余生!
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("SaEXOxIfsJ9uLvvd22739AQs-gzGzoHsz", "w1oRPqsaYjjTCdmTIY3S3AxX");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
